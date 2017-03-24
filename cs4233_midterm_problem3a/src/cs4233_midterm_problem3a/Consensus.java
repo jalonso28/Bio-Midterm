@@ -1,0 +1,75 @@
+package cs4233_midterm_problem3a;
+
+import java.util.ArrayList;
+
+public class Consensus {
+	
+	private static int motifCount;
+	
+	private static int seqCount;
+	
+	private static int seqInd;
+	
+	private static int[] scores;
+	
+	private static int[][] best;
+	
+	private static int[] current;
+	
+	private static int[][] end;
+
+	public Consensus(ArrayList<String> sequences, ArrayList<String> motifs, int k) {
+		
+		scores = new int[sequences.get(0).length() - k];
+		
+		best = new int[sequences.size()][2];
+		
+		current = new int[2];
+		
+		seqInd = 0;
+		
+		seqCount = 0;
+		
+		current[0] = (int) 0;
+		current[1] = (int) 0;
+		
+		//Check each possible motif
+		for(motifCount = 0; motifCount < motifs.size(); motifCount++) {
+			
+			
+			//Go through each sequence
+			for(; seqCount < sequences.size(); seqCount++) {
+			
+				//go through every subsequence
+				for(; seqInd < (sequences.get(0).length() - k); seqInd++) {
+				
+					int c = 0;
+					scores[seqInd] = 0;
+				
+					for(int i = seqInd; i < (seqInd + k); i++) {
+						if(i >= sequences.get(0).length())
+							break;
+						if(sequences.get(seqCount).charAt(i) != motifs.get(motifCount).charAt(c)) {
+							scores[seqInd] += 1;
+						}
+						c++;
+					}
+					//find the highest value for current sequence
+					if(scores[seqInd] < current[0]) {
+						current[0] = scores[seqInd];
+						current[1] = (int) seqInd;
+					}
+				}
+			
+				best[seqCount][0] = current[0];
+				best[seqCount][1] = current[1];
+				current[0] = (int) 0;
+				current[1] = (int) 0;
+				seqInd = 0;
+			}
+	
+		}
+		
+	}
+
+}
